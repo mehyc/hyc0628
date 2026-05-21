@@ -3,37 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-    <meta name="theme-color" content="#0A0A0F">
-    <meta name="description" content="Chan Hyc | 匿名提问箱 · 官方LINE客服">
-    <meta property="og:title" content="Chan Hyc · 秘密基地">
-    <meta property="og:description" content="匿名提问箱 · 官方LINE ID: @517vqktq 欢迎私讯">
     <title>Chan Hyc · 秘密基地</title>
     <!-- Google Fonts & Font Awesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Firebase SDK (Compat 版本，方便直接使用 config) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: radial-gradient(circle at 10% 20%, #0b0d17, #03030a);
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
             color: #f0f0f5;
             line-height: 1.5;
             min-height: 100vh;
-            padding-bottom: 115px; /* 为固定底部腾出空间 */
-            position: relative;
+            padding-bottom: 115px;
         }
-        /* 跑马灯 - 无限滚动 */
         .marquee-wrapper {
             position: sticky;
             top: 0;
-            left: 0;
             width: 100%;
             background: rgba(10, 12, 26, 0.85);
             backdrop-filter: blur(12px);
@@ -53,39 +42,20 @@
             padding: 0 1rem;
             font-size: 1rem;
             font-weight: 500;
-            letter-spacing: 0.5px;
             color: #f0eaff;
-            text-shadow: 0 0 3px rgba(106, 90, 205, 0.5);
         }
         @keyframes marqueeScroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-        @media (max-width: 550px) {
-            .marquee-track span { font-size: 0.85rem; padding: 0 0.8rem; }
-        }
-        /* 主内容区 */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1.5rem 1.5rem 1.5rem 1.5rem;
-        }
-        .container {
-            max-width: 560px;
-            width: 100%;
-            margin: 0 auto;
-            animation: fadeInUp 0.6s ease-out;
-        }
-        /* 磨砂玻璃卡片 */
+        .main-content { display: flex; justify-content: center; padding: 1.5rem; }
+        .container { max-width: 560px; width: 100%; }
         .profile-card {
             background: rgba(18, 22, 35, 0.65);
             backdrop-filter: blur(12px);
             border-radius: 2.5rem;
-            padding: 1.8rem 1.8rem 2rem;
-            margin-bottom: 1.6rem;
+            padding: 1.8rem;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
         }
         .name {
             font-size: 2rem;
@@ -93,128 +63,79 @@
             text-align: center;
             background: linear-gradient(115deg, #FFF, #cdc7ff);
             background-clip: text;
-            -webkit-background-clip: text;
             color: transparent;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
         }
         .bio {
             text-align: center;
-            font-weight: 400;
-            font-size: 0.95rem;
-            color: #e0e2f5;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 1rem 0.8rem;
+            background: rgba(0,0,0,0.2);
+            padding: 1rem;
             border-radius: 1.5rem;
             margin-bottom: 1.8rem;
             line-height: 1.65;
             white-space: pre-line;
         }
-        /* 按钮区 */
-        .links-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 0.5rem;
-        }
+        .links-grid { display: flex; flex-direction: column; gap: 1rem; }
         .link-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(25, 30, 45, 0.7);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.9rem 1.6rem;
+            gap: 12px;
+            background: rgba(25,30,45,0.7);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.9rem;
             border-radius: 60px;
             font-weight: 700;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            color: #F1F3FF;
             text-decoration: none;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            gap: 12px;
+            color: #F1F3FF;
+            transition: 0.25s;
         }
-        .link-btn i { font-size: 1.3rem; color: #b7adff; }
-        .link-btn:hover {
-            background: rgba(85, 70, 180, 0.7);
-            border-color: rgba(170, 126, 255, 0.5);
-            transform: scale(1.02);
-            color: white;
-        }
-        .link-btn:hover i { color: white; }
-        /* 底部固定栏 (包含计数) */
+        .link-btn:hover { background: rgba(85,70,180,0.7); transform: scale(1.02); }
         .fixed-footer {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: rgba(10, 12, 26, 0.85);
+            background: rgba(10,12,26,0.85);
             backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 0.8rem 1rem;
+            border-top: 1px solid rgba(255,255,255,0.12);
+            padding: 0.8rem;
             text-align: center;
             font-size: 0.75rem;
             color: #b4b7d6;
             z-index: 99;
-            line-height: 1.6;
         }
-        .fixed-footer strong { color: #c4b5fd; }
-        .footer-stats {
-            margin-top: 4px;
-            font-size: 0.7rem;
-            color: #9f9fcf;
-        }
-        .footer-stats i { margin-right: 4px; }
-        /* Toast 提示 */
+        .footer-stats { margin-top: 4px; font-size: 0.7rem; color: #9f9fcf; }
         .toast-msg {
             position: fixed;
             bottom: 100px;
             left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: rgba(30, 35, 55, 0.95);
+            transform: translateX(-50%);
+            background: rgba(30,35,55,0.95);
             backdrop-filter: blur(16px);
-            color: white;
             padding: 12px 24px;
             border-radius: 60px;
             font-size: 0.85rem;
-            font-weight: 500;
-            z-index: 1000;
-            border: 1px solid rgba(170, 126, 255, 0.5);
-            opacity: 0;
-            transition: opacity 0.2s, transform 0.2s;
-            pointer-events: none;
             white-space: nowrap;
+            opacity: 0;
+            transition: 0.2s;
+            pointer-events: none;
+            z-index: 1000;
         }
-        .toast-msg.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(18px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .toast-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
         @media (max-width: 450px) {
-            .main-content { padding: 1rem; }
             .name { font-size: 1.7rem; }
-            .link-btn { padding: 0.75rem 1rem; font-size: 1rem; }
             .bio { font-size: 0.88rem; }
-            body { padding-bottom: 110px; }
-            .toast-msg { bottom: 100px; }
         }
-        ::selection { background: #7c5eff; color: white; }
-        .link-btn { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
 <body>
-
-<!-- 跑马灯无限滚动 -->
 <div class="marquee-wrapper">
     <div class="marquee-track">
         <span>✨ 歡迎來到我的個人網頁！可以私訊官方賴，官方賴id：@517vqktq（記得加上@） ✨🔮 正在載入未知宇宙... 你是第 99,999 位造訪這個秘密基地的地球人。</span>
         <span>✨ 歡迎來到我的個人網頁！可以私訊官方賴，官方賴id：@517vqktq（記得加上@） ✨🔮 正在載入未知宇宙... 你是第 99,999 位造訪這個秘密基地的地球人。</span>
     </div>
 </div>
-
 <div class="main-content">
     <div class="container">
         <div class="profile-card">
@@ -228,32 +149,20 @@
                 聚散離合本就是人生常態
             </div>
             <div class="links-grid">
-                <!-- 匿名按钮 -->
-                <a href="https://ngl.link/www278278a?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAdGRzdgR39oFleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAad1QHgTFR0yQpY9qU7hXsEEkMnMy00dPx05wETCkD6MYZziI1NdfSYkonQisw_aem_YRlYAVt9TJrgoe9I48i-OQ" target="_blank" rel="noopener noreferrer" class="link-btn">
-                    <i class="fas fa-user-secret"></i><span>匿名</span>
-                </a>
-                <!-- 官方LINE按钮 -->
-                <a href="https://lin.ee/NO8O6j4" target="_blank" rel="noopener noreferrer" class="link-btn">
-                    <i class="fab fa-line"></i><span>官方LINE · @517vqktq</span>
-                </a>
+                <a href="https://ngl.link/www278278a?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAdGRzdgR39oFleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAad1QHgTFR0yQpY9qU7hXsEEkMnMy00dPx05wETCkD6MYZziI1NdfSYkonQisw_aem_YRlYAVt9TJrgoe9I48i-OQ" target="_blank" rel="noopener noreferrer" class="link-btn"><i class="fas fa-user-secret"></i><span>匿名</span></a>
+                <a href="https://lin.ee/NO8O6j4" target="_blank" rel="noopener noreferrer" class="link-btn"><i class="fab fa-line"></i><span>官方LINE · @517vqktq</span></a>
             </div>
         </div>
     </div>
 </div>
-
-<!-- 底部固定区域 (含总浏览计数) -->
 <div class="fixed-footer">
     <div>© chan hyc 開發及維護 · 多了解我</div>
     <div>官方LINE ID：<strong>@517vqktq</strong> (歡迎私訊)</div>
-    <div class="footer-stats">
-        <i class="fas fa-chart-line"></i> 總瀏覽次數：<span id="visitCountDisplay">⟳ 讀取中</span>
-    </div>
+    <div class="footer-stats"><i class="fas fa-chart-line"></i> 總瀏覽次數：<span id="visitCountDisplay">⟳ 同步中</span></div>
 </div>
-
 <div id="toastMsg" class="toast-msg">✨ 操作成功</div>
 
 <script>
-    // ======================= Firebase 配置 (由用户提供) =======================
     const firebaseConfig = {
         apiKey: "AIzaSyBAObVm3FY_8GkR9u5TxUCXBsWm2uB0Pn0",
         authDomain: "mehyc-7eabb.firebaseapp.com",
@@ -264,71 +173,45 @@
         appId: "1:583873851023:web:8f2de1755b7e27e62ccafa",
         measurementId: "G-F0EQML1TQ9"
     };
-
-    // 初始化 Firebase
     firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const counterRef = database.ref('visitCount');
-
-    // 获取显示元素
+    const counterRef = firebase.database().ref('visitCount');
     const displaySpan = document.getElementById('visitCountDisplay');
 
-    // 显示数字带千分位
     function updateDisplay(value) {
-        if (displaySpan) {
-            displaySpan.innerText = (typeof value === 'number') ? value.toLocaleString() : value;
+        if (displaySpan) displaySpan.innerText = typeof value === 'number' ? value.toLocaleString() : value;
+    }
+
+    // 原子事务 +1 (并发安全)
+    counterRef.transaction((current) => {
+        let newCount = (current === null || typeof current !== 'number') ? 1 : current + 1;
+        return newCount;
+    }, (error, committed, snapshot) => {
+        if (error) {
+            console.error('计数器错误', error);
+            updateDisplay('⚠️');
+        } else if (committed) {
+            updateDisplay(snapshot.val());
+        } else {
+            updateDisplay('?');
         }
-    }
+    });
 
-    // 原子事务：每次访问 +1，绝对精准
-    function incrementVisitCount() {
-        counterRef.transaction((current) => {
-            // 如果节点不存在或不是数字，初始化为0
-            let newCount = (current === null || typeof current !== 'number') ? 1 : current + 1;
-            return newCount;
-        }, (error, committed, snapshot) => {
-            if (error) {
-                console.error('计数器事务错误:', error);
-                updateDisplay('⚠️ 錯誤');
-            } else if (committed) {
-                const newValue = snapshot.val();
-                updateDisplay(newValue);
-                console.log(`✅ 访问计数已更新: ${newValue}`);
-            } else {
-                console.warn('事务未提交，可能被服务器拒绝');
-                updateDisplay('?');
-            }
-        });
-    }
-
-    // 页面加载时执行计数 +1
-    incrementVisitCount();
-
-    // ========== 辅助功能: Toast 提示 & 外链安全 ==========
+    // Toast 提示及链接安全
     const toast = document.getElementById('toastMsg');
-    let toastTimer = null;
-    function showToastMessage(msg) {
-        if (!toast) return;
-        toast.textContent = msg || '✨ 操作完成';
+    let timer = null;
+    function showToast(msg) {
+        toast.textContent = msg;
         toast.classList.add('show');
-        if (toastTimer) clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => toast.classList.remove('show'), 2200);
     }
-
-    // 为所有外部链接增加安全属性
     document.querySelectorAll('a[href^="http"], a[href^="https://lin.ee"]').forEach(link => {
         if (!link.target) link.target = '_blank';
         let rel = link.rel || '';
         if (!rel.includes('noopener')) link.rel = rel + ' noopener noreferrer';
     });
-
-    // 按钮点击提示
-    const anonymousBtn = document.querySelector('.links-grid a:first-child');
-    const lineBtn = document.querySelector('.links-grid a:last-child');
-    if (anonymousBtn) anonymousBtn.addEventListener('click', () => showToastMessage('📨 匿名提問箱 · 期待你的訊息'));
-    if (lineBtn) lineBtn.addEventListener('click', () => showToastMessage('💚 加入官方LINE · 即時聯繫'));
-
-    console.log('✅ 原子计数器已启用，每次访问精准 +1');
+    document.querySelector('.links-grid a:first-child')?.addEventListener('click', () => showToast('📨 匿名提問箱 · 期待你的訊息'));
+    document.querySelector('.links-grid a:last-child')?.addEventListener('click', () => showToast('💚 加入官方LINE · 即時聯繫'));
 </script>
 </body>
 </html>
