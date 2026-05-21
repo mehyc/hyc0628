@@ -4,30 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
     <title>Chan Hyc · 秘密基地</title>
-    <!-- Google Fonts & Font Awesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: radial-gradient(circle at 10% 20%, #0b0d17, #03030a);
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
             color: #f0f0f5;
-            line-height: 1.5;
-            min-height: 100vh;
             padding-bottom: 115px;
         }
         .marquee-wrapper {
             position: sticky;
             top: 0;
-            width: 100%;
-            background: rgba(10, 12, 26, 0.85);
+            background: rgba(10,12,26,0.85);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             padding: 0.75rem 0;
             overflow-x: hidden;
         }
@@ -35,13 +29,11 @@
             display: flex;
             white-space: nowrap;
             animation: marqueeScroll 30s linear infinite;
-            width: fit-content;
         }
         .marquee-track span {
             display: inline-block;
             padding: 0 1rem;
             font-size: 1rem;
-            font-weight: 500;
             color: #f0eaff;
         }
         @keyframes marqueeScroll {
@@ -51,17 +43,17 @@
         .main-content { display: flex; justify-content: center; padding: 1.5rem; }
         .container { max-width: 560px; width: 100%; }
         .profile-card {
-            background: rgba(18, 22, 35, 0.65);
+            background: rgba(18,22,35,0.65);
             backdrop-filter: blur(12px);
             border-radius: 2.5rem;
             padding: 1.8rem;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255,255,255,0.08);
         }
         .name {
             font-size: 2rem;
             font-weight: 700;
             text-align: center;
-            background: linear-gradient(115deg, #FFF, #cdc7ff);
+            background: linear-gradient(115deg,#FFF,#cdc7ff);
             background-clip: text;
             color: transparent;
             margin-bottom: 1rem;
@@ -163,6 +155,7 @@
 <div id="toastMsg" class="toast-msg">✨ 操作成功</div>
 
 <script>
+    // Firebase 配置（您提供的）
     const firebaseConfig = {
         apiKey: "AIzaSyBAObVm3FY_8GkR9u5TxUCXBsWm2uB0Pn0",
         authDomain: "mehyc-7eabb.firebaseapp.com",
@@ -173,45 +166,67 @@
         appId: "1:583873851023:web:8f2de1755b7e27e62ccafa",
         measurementId: "G-F0EQML1TQ9"
     };
+
+    // 初始化
     firebase.initializeApp(firebaseConfig);
-    const counterRef = firebase.database().ref('visitCount');
+    const db = firebase.database();
+    const counterRef = db.ref('visitCount');
     const displaySpan = document.getElementById('visitCountDisplay');
 
     function updateDisplay(value) {
-        if (displaySpan) displaySpan.innerText = typeof value === 'number' ? value.toLocaleString() : value;
-    }
-
-    // 原子事务 +1 (并发安全)
-    counterRef.transaction((current) => {
-        let newCount = (current === null || typeof current !== 'number') ? 1 : current + 1;
-        return newCount;
-    }, (error, committed, snapshot) => {
-        if (error) {
-            console.error('计数器错误', error);
-            updateDisplay('⚠️');
-        } else if (committed) {
-            updateDisplay(snapshot.val());
-        } else {
-            updateDisplay('?');
+        if (displaySpan) {
+            displaySpan.innerText = (typeof value === 'number') ? value.toLocaleString() : value;
         }
-    });
-
-    // Toast 提示及链接安全
-    const toast = document.getElementById('toastMsg');
-    let timer = null;
-    function showToast(msg) {
-        toast.textContent = msg;
-        toast.classList.add('show');
-        if (timer) clearTimeout(timer);
-        timer = setTimeout(() => toast.classList.remove('show'), 2200);
     }
+
+    // 高并发原子 +1
+    function incrementAtomic() {
+        counterRef.transaction((current) => {
+            let newVal = (current === null || typeof current !== 'number') ? 1 : current + 1;
+            return newVal;
+        }, (error, committed, snapshot) => {
+            if (error) {
+                console.error('transaction error', error);
+                updateDisplay('⚠️ 權限錯誤');
+                showToast('❌ 計數失敗，請檢查 Firebase 規則');
+            } else if (committed) {
+                updateDisplay(snapshot.val());
+                console.log('✅ 計數 +1 成功，目前總數:', snapshot.val());
+            } else {
+                updateDisplay('?');
+                console.warn('事務未提交');
+            }
+        });
+    }
+
+    // 启动计数
+    incrementAtomic();
+
+    // Toast 工具
+    const toastEl = document.getElementById('toastMsg');
+    let toastTimer = null;
+    function showToast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add('show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200);
+    }
+
+    // 外链安全
     document.querySelectorAll('a[href^="http"], a[href^="https://lin.ee"]').forEach(link => {
         if (!link.target) link.target = '_blank';
         let rel = link.rel || '';
         if (!rel.includes('noopener')) link.rel = rel + ' noopener noreferrer';
     });
-    document.querySelector('.links-grid a:first-child')?.addEventListener('click', () => showToast('📨 匿名提問箱 · 期待你的訊息'));
-    document.querySelector('.links-grid a:last-child')?.addEventListener('click', () => showToast('💚 加入官方LINE · 即時聯繫'));
+
+    // 按钮点击提示
+    const btn1 = document.querySelector('.links-grid a:first-child');
+    const btn2 = document.querySelector('.links-grid a:last-child');
+    if (btn1) btn1.addEventListener('click', () => showToast('📨 匿名提問箱 · 期待你的訊息'));
+    if (btn2) btn2.addEventListener('click', () => showToast('💚 加入官方LINE · 即時聯繫'));
+
+    // 控制台提示
+    console.log('🚀 原子計數器已啟動，支援超高併發 +1');
 </script>
 </body>
 </html>
