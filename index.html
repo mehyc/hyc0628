@@ -16,12 +16,15 @@
             color: #f0f0f5;
             padding-bottom: 115px;
         }
+        /* 跑马灯固定 + 不遮挡内容 */
         .marquee-wrapper {
             position: sticky;
             top: 0;
-            background: rgba(10,12,26,0.85);
+            width: 100%;
+            background: rgba(10, 12, 26, 0.85);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
             padding: 0.75rem 0;
             overflow-x: hidden;
         }
@@ -29,52 +32,66 @@
             display: flex;
             white-space: nowrap;
             animation: marqueeScroll 30s linear infinite;
+            width: fit-content;
         }
         .marquee-track span {
             display: inline-block;
             padding: 0 1rem;
             font-size: 1rem;
+            font-weight: 500;
             color: #f0eaff;
         }
         @keyframes marqueeScroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-        .main-content { display: flex; justify-content: center; padding: 1.5rem; }
-        .container { max-width: 560px; width: 100%; }
+        .main-content {
+            display: flex;
+            justify-content: center;
+            padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+        }
+        .container {
+            max-width: 560px;
+            width: 100%;
+            animation: fadeInUp 0.6s ease-out;
+        }
         .profile-card {
-            background: rgba(18,22,35,0.65);
+            background: rgba(18, 22, 35, 0.65);
             backdrop-filter: blur(12px);
             border-radius: 2.5rem;
             padding: 1.8rem;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
         .name {
             font-size: 2rem;
             font-weight: 700;
             text-align: center;
-            background: linear-gradient(115deg,#FFF,#cdc7ff);
+            background: linear-gradient(115deg, #FFF, #cdc7ff);
             background-clip: text;
             color: transparent;
             margin-bottom: 1rem;
         }
         .bio {
             text-align: center;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.2);
             padding: 1rem;
             border-radius: 1.5rem;
             margin-bottom: 1.8rem;
             line-height: 1.65;
             white-space: pre-line;
         }
-        .links-grid { display: flex; flex-direction: column; gap: 1rem; }
+        .links-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
         .link-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
-            background: rgba(25,30,45,0.7);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(25, 30, 45, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 0.9rem;
             border-radius: 60px;
             font-weight: 700;
@@ -82,28 +99,35 @@
             color: #F1F3FF;
             transition: 0.25s;
         }
-        .link-btn:hover { background: rgba(85,70,180,0.7); transform: scale(1.02); }
+        .link-btn:hover {
+            background: rgba(85, 70, 180, 0.7);
+            transform: scale(1.02);
+        }
         .fixed-footer {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: rgba(10,12,26,0.85);
+            background: rgba(10, 12, 26, 0.85);
             backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255,255,255,0.12);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
             padding: 0.8rem;
             text-align: center;
             font-size: 0.75rem;
             color: #b4b7d6;
             z-index: 99;
         }
-        .footer-stats { margin-top: 4px; font-size: 0.7rem; color: #9f9fcf; }
+        .footer-stats {
+            margin-top: 4px;
+            font-size: 0.7rem;
+            color: #9f9fcf;
+        }
         .toast-msg {
             position: fixed;
             bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(30,35,55,0.95);
+            background: rgba(30, 35, 55, 0.95);
             backdrop-filter: blur(16px);
             padding: 12px 24px;
             border-radius: 60px;
@@ -114,7 +138,14 @@
             pointer-events: none;
             z-index: 1000;
         }
-        .toast-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast-msg.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         @media (max-width: 450px) {
             .name { font-size: 1.7rem; }
             .bio { font-size: 0.88rem; }
@@ -122,12 +153,14 @@
     </style>
 </head>
 <body>
+<!-- 跑马灯固定顶部，不遮挡内容 -->
 <div class="marquee-wrapper">
     <div class="marquee-track">
         <span>✨ 歡迎來到我的個人網頁！可以私訊官方賴，官方賴id：@517vqktq（記得加上@） ✨🔮 正在載入未知宇宙... 你是第 99,999 位造訪這個秘密基地的地球人。</span>
         <span>✨ 歡迎來到我的個人網頁！可以私訊官方賴，官方賴id：@517vqktq（記得加上@） ✨🔮 正在載入未知宇宙... 你是第 99,999 位造訪這個秘密基地的地球人。</span>
     </div>
 </div>
+
 <div class="main-content">
     <div class="container">
         <div class="profile-card">
@@ -141,12 +174,31 @@
                 聚散離合本就是人生常態
             </div>
             <div class="links-grid">
-                <a href="https://ngl.link/www278278a?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAdGRzdgR39oFleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAad1QHgTFR0yQpY9qU7hXsEEkMnMy00dPx05wETCkD6MYZziI1NdfSYkonQisw_aem_YRlYAVt9TJrgoe9I48i-OQ" target="_blank" rel="noopener noreferrer" class="link-btn"><i class="fas fa-user-secret"></i><span>匿名</span></a>
-                <a href="https://lin.ee/NO8O6j4" target="_blank" rel="noopener noreferrer" class="link-btn"><i class="fab fa-line"></i><span>官方LINE · @517vqktq</span></a>
+                <!-- 匿名按钮 -->
+                <a href="https://ngl.link/www278278a?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAdGRzdgR39oFleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAad1QHgTFR0yQpY9qU7hXsEEkMnMy00dPx05wETCkD6MYZziI1NdfSYkonQisw_aem_YRlYAVt9TJrgoe9I48i-OQ" target="_blank" rel="noopener noreferrer" class="link-btn">
+                    <i class="fas fa-user-secret"></i><span>匿名</span>
+                </a>
+                <!-- 官方LINE按钮 -->
+                <a href="https://lin.ee/NO8O6j4" target="_blank" rel="noopener noreferrer" class="link-btn">
+                    <i class="fab fa-line"></i><span>官方LINE · @517vqktq</span>
+                </a>
+                <!-- 個人檔案按鈕 -->
+                <a href="https://sites.google.com/view/mehyc/%E8%87%AA%E6%88%91%E4%BB%8B%E7%B4%B9" target="_blank" rel="noopener noreferrer" class="link-btn">
+                    <i class="fas fa-user-circle"></i><span>個人檔案</span>
+                </a>
+                <!-- YouTube 按鈕 -->
+                <a href="https://youtube.com/channel/UCGhbnvMICl4VlQOtqD34QuA" target="_blank" rel="noopener noreferrer" class="link-btn">
+                    <i class="fab fa-youtube"></i><span>YouTube 頻道</span>
+                </a>
+                <!-- 新增抖音按鈕 -->
+                <a href="https://www.tiktok.com/@garygary0628?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer" class="link-btn">
+                    <i class="fab fa-tiktok"></i><span>抖音 TikTok</span>
+                </a>
             </div>
         </div>
     </div>
 </div>
+
 <div class="fixed-footer">
     <div>© chan hyc 開發及維護 · 多了解我</div>
     <div>官方LINE ID：<strong>@517vqktq</strong> (歡迎私訊)</div>
@@ -155,7 +207,7 @@
 <div id="toastMsg" class="toast-msg">✨ 操作成功</div>
 
 <script>
-    // Firebase 配置（您提供的）
+    // Firebase 配置
     const firebaseConfig = {
         apiKey: "AIzaSyBAObVm3FY_8GkR9u5TxUCXBsWm2uB0Pn0",
         authDomain: "mehyc-7eabb.firebaseapp.com",
@@ -166,41 +218,29 @@
         appId: "1:583873851023:web:8f2de1755b7e27e62ccafa",
         measurementId: "G-F0EQML1TQ9"
     };
-
-    // 初始化
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    const counterRef = db.ref('visitCount');
+    const counterRef = firebase.database().ref('visitCount');
     const displaySpan = document.getElementById('visitCountDisplay');
 
     function updateDisplay(value) {
-        if (displaySpan) {
-            displaySpan.innerText = (typeof value === 'number') ? value.toLocaleString() : value;
+        if (displaySpan) displaySpan.innerText = (typeof value === 'number') ? value.toLocaleString() : value;
+    }
+
+    // 原子事务 +1
+    counterRef.transaction((current) => {
+        let newVal = (current === null || typeof current !== 'number') ? 1 : current + 1;
+        return newVal;
+    }, (error, committed, snapshot) => {
+        if (error) {
+            console.error('transaction error', error);
+            updateDisplay('⚠️ 權限錯誤');
+            showToast('❌ 計數失敗，請檢查 Firebase 規則');
+        } else if (committed) {
+            updateDisplay(snapshot.val());
+        } else {
+            updateDisplay('?');
         }
-    }
-
-    // 高并发原子 +1
-    function incrementAtomic() {
-        counterRef.transaction((current) => {
-            let newVal = (current === null || typeof current !== 'number') ? 1 : current + 1;
-            return newVal;
-        }, (error, committed, snapshot) => {
-            if (error) {
-                console.error('transaction error', error);
-                updateDisplay('⚠️ 權限錯誤');
-                showToast('❌ 計數失敗，請檢查 Firebase 規則');
-            } else if (committed) {
-                updateDisplay(snapshot.val());
-                console.log('✅ 計數 +1 成功，目前總數:', snapshot.val());
-            } else {
-                updateDisplay('?');
-                console.warn('事務未提交');
-            }
-        });
-    }
-
-    // 启动计数
-    incrementAtomic();
+    });
 
     // Toast 工具
     const toastEl = document.getElementById('toastMsg');
@@ -212,21 +252,20 @@
         toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200);
     }
 
-    // 外链安全
-    document.querySelectorAll('a[href^="http"], a[href^="https://lin.ee"]').forEach(link => {
+    // 外链安全 & 按钮提示
+    document.querySelectorAll('a[href^="http"], a[href^="https://lin.ee"], a[href^="https://sites.google.com"], a[href^="https://youtube.com"], a[href^="https://www.tiktok.com"]').forEach(link => {
         if (!link.target) link.target = '_blank';
         let rel = link.rel || '';
         if (!rel.includes('noopener')) link.rel = rel + ' noopener noreferrer';
     });
+    const btns = document.querySelectorAll('.link-btn');
+    if (btns[0]) btns[0].addEventListener('click', () => showToast('📨 匿名提問箱 · 期待你的訊息'));
+    if (btns[1]) btns[1].addEventListener('click', () => showToast('💚 加入官方LINE · 即時聯繫'));
+    if (btns[2]) btns[2].addEventListener('click', () => showToast('👤 個人檔案 · 了解更多關於我'));
+    if (btns[3]) btns[3].addEventListener('click', () => showToast('🎬 前往 YouTube 頻道 · 觀看更多影片'));
+    if (btns[4]) btns[4].addEventListener('click', () => showToast('🎵 追蹤抖音 TikTok · 精彩短影音'));
 
-    // 按钮点击提示
-    const btn1 = document.querySelector('.links-grid a:first-child');
-    const btn2 = document.querySelector('.links-grid a:last-child');
-    if (btn1) btn1.addEventListener('click', () => showToast('📨 匿名提問箱 · 期待你的訊息'));
-    if (btn2) btn2.addEventListener('click', () => showToast('💚 加入官方LINE · 即時聯繫'));
-
-    // 控制台提示
-    console.log('🚀 原子計數器已啟動，支援超高併發 +1');
+    console.log('✅ 原子計數器啟動，新增抖音按鈕，跑馬燈固定不遮擋');
 </script>
 </body>
 </html>
